@@ -1,8 +1,25 @@
+// ==UserScript==
+// @name        GM_config CN
+// @namespace   https://github.com/ywzhaiqi/
+// @description sizzlemctwizzle 的 GM_config 库中文版本
+// @source      https://github.com/ywzhaiqi/GM_config
+// @version     1.0
+
+// @copyright   sizzlemctwizzle
+
+// @grant       GM_getValue
+// @grant       GM_setValue
+// @grant       GM_deleteValue
+// @license     LGPL 3
+// ==/UserScript==
+
 /*
-修改说明
+  修改说明
     1、改成中文 "确定"、"取消" 按钮。
     2、select 新增了 textContents 数组。
+*/
 
+/*
 Copyright 2009+, GM_config Contributors (https://github.com/sizzlemctwizzle/GM_config)
 
 GM_config Contributors:
