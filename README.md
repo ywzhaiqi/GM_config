@@ -1,6 +1,6 @@
-For GM_config usage information, read the [wiki](https://github.com/sizzlemctwizzle/GM_config/wiki/).
+sizzlemctwizzle 的 GM_config 库个人修改版本。
 
-For a live example of what GM_config can do, see the [demo page](http://sizzlemctwizzle.github.io/GM_config/).
+For GM_config usage information, read the [wiki](https://github.com/sizzlemctwizzle/GM_config/wiki/).
 
 ### 修改说明
 
@@ -13,5 +13,5 @@ greasyfork 的地址：[https://greasyfork.org/zh-CN/scripts/6158-gm-config-cn](
 
 ### 示例
 
-1. [picviewerCE 设置窗口（tab 格式）](example/picviewerCE.html)
-2. [Mouseover Popup Image Viewer 设置窗口](example/Mouseover Popup Image Viewer.html)
+1. [picviewerCE 设置窗口（tab 格式）](https://github.com/ywzhaiqi/GM_config/blob/master/example/picviewerCE.html)
+2. [Mouseover Popup Image Viewer 设置窗口](https://github.com/ywzhaiqi/GM_config/blob/master/example/Mouseover Popup Image Viewer.html)
