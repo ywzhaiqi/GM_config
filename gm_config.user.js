@@ -3,7 +3,7 @@
 // @namespace   https://github.com/ywzhaiqi/
 // @description sizzlemctwizzle 的 GM_config 库中文版本
 // @source      https://github.com/ywzhaiqi/GM_config
-// @version     1.0
+// @version     1.1
 
 // @copyright   sizzlemctwizzle
 
@@ -64,29 +64,59 @@ function GM_configInit(config, args) {
         config.onClose = config.onClose || function() {};
         config.onReset = config.onReset || function() {};
         config.isOpen = false;
-        config.title = 'User Script Settings';
+        config.title = '用户脚本设置';
         config.css = {
-        basic: [
-            "#GM_config * { font-family: arial,tahoma,myriad pro,sans-serif; }",
-            "#GM_config { background: #FFF; }",
-            "#GM_config input[type='radio'] { margin-right: 8px; }",
-            "#GM_config .indent40 { margin-left: 40%; }",
-            "#GM_config .field_label { font-size: 12px; font-weight: bold; margin-right: 6px; }",
-            "#GM_config .radio_label { font-size: 12px; }",
-            "#GM_config .block { display: block; }",
-            "#GM_config .saveclose_buttons { margin: 16px 10px 10px; padding: 2px 12px; }",
-            "#GM_config .reset, #GM_config .reset a," +
-              " #GM_config_buttons_holder { color: #000; text-align: right; }",
-            "#GM_config .config_header { font-size: 20pt; margin: 0; }",
-            "#GM_config .config_desc, #GM_config .section_desc, #GM_config .reset { font-size: 9pt; }",
-            "#GM_config .center { text-align: center; }",
-            "#GM_config .section_header_holder { margin-top: 8px; }",
-            "#GM_config .config_var { margin: 0 0 4px; }",
-            "#GM_config .section_header { background: #414141; border: 1px solid #000; color: #FFF;",
-            " font-size: 13pt; margin: 0; }",
-            "#GM_config .section_desc { background: #EFEFEF; border: 1px solid #CCC; color: #575757;" +
-              " font-size: 9pt; margin: 0 0 6px; }"
-        ].join('\n') + '\n',
+            basic: [
+                "#GM_config * { font-family: arial,tahoma,myriad pro,sans-serif; }",
+                "#GM_config { background: #FFF; }",
+                "#GM_config input[type='radio'] { margin-right: 8px; }",
+                "#GM_config .indent40 { margin-left: 40%; }",
+                "#GM_config .field_label { font-size: 12px; font-weight: bold; margin-right: 6px; }",
+                "#GM_config .radio_label { font-size: 12px; }",
+                "#GM_config .block { display: block; }",
+                "#GM_config .saveclose_buttons { margin: 16px 10px 10px; padding: 2px 12px; }",
+                "#GM_config .reset, #GM_config .reset a," +
+                  " #GM_config_buttons_holder { color: #000; text-align: right; }",
+                "#GM_config .config_header { font-size: 20pt; margin: 0; }",
+                "#GM_config .config_desc, #GM_config .section_desc, #GM_config .reset { font-size: 9pt; }",
+                "#GM_config .center { text-align: center; }",
+                "#GM_config .section_header_holder { margin-top: 8px; }",
+                "#GM_config .config_var { margin: 0 0 4px; }",
+                "#GM_config .section_header { background: #414141; border: 1px solid #000; color: #FFF;",
+                " font-size: 13pt; margin: 0; }",
+                "#GM_config .section_desc { background: #EFEFEF; border: 1px solid #CCC; color: #575757;" +
+                  " font-size: 9pt; margin: 0 0 6px; }",
+                // newer
+                "#GM_config input[type='number'] { width: 60px; }",
+                "#GM_config .nav-tabs { margin: 10 0}",
+                "#GM_config .nav-tabs > div { display: inline; padding: 3px 10px; }",
+                "#pv-prefs .section_header_holder { padding-left: 10px; }",
+                ].join('\n') + '\n',
+            skin_tab: [
+                "#GM_config { background: #EEE; }",
+                "#GM_config textarea { width: 98%; height: 45px; margin-top: 5px; }",
+                "#GM_config .field_label { display: inline-block; font-weight: normal; }",
+                // 在同一行内的设置
+                "#GM_config .inline input[type='checkbox'] { margin-left: 0; }",
+                "#GM_config .inline .config_var { margin-left: 15px; }",
+                // 内容样式
+                "#GM_config .config_var { font-size: 12px; padding: 5px; margin: 0; }",
+                "#GM_config .config_header a { text-decoration: none; color: #000; }",
+                "#GM_config .nav-tabs { margin: 20 0}",
+                "#GM_config .nav-tabs > div { font-size: 14px; color: #999; cursor: pointer; padding: 10px 20px; }",
+                "#GM_config .nav-tabs > .active { cursor: default; color: #FFF; }",
+                "#GM_config .nav-tabs > div:hover { color: #FFF; }",
+                ].join('\n') + '\n',
+            skin_1: [  // 仿 Mouseover Popup Image Viewer 样式
+                "#GM_config { background: #EEE; }",
+                "#GM_config textarea { width: 98%; height: 45px; margin-top: 5px; }",
+                "#GM_config .config_var { font-size: 12px; }",
+                "#GM_config .inline .config_var { margin-left: 15px; }",
+                "#GM_config .field_label { display: inline-block; font-weight: normal; }",
+                "#GM_config { padding: 20px 30px; margin: 0; }",
+                "#GM_config .config_header { margin-bottom: 10px; }",
+                "#GM_config div.config_var { padding: 7px 0; }",
+                ].join('\n') + '\n',
             basicPrefix: "GM_config",
             stylish: ""
         };
@@ -113,7 +143,11 @@ function GM_configInit(config, args) {
                 case 'object':
                     for (var j in arg) { // could be a callback functions or settings object
                         if (typeof arg[j] != "function") { // we are in the settings object
-                            settings.fields = arg; // store settings object
+                            if (typeof arg[j] == 'string') {
+                                settings.frameStyle = arg;
+                            } else {
+                                settings.fields = arg; // store settings object
+                            }
                             break; // leave the loop
                         } // otherwise it must be a callback function
                         if (!settings.events) settings.events = {};
@@ -121,12 +155,13 @@ function GM_configInit(config, args) {
                     }
                     break;
                 case 'function': // passing a bare function is set to open callback
-                    settings.events = {onOpen: arg};
+                    settings.events = {open: arg};
                     break;
                 case 'string': // could be custom CSS or the title string
-                    if (/\w+\s*\{\s*\w+\s*:\s*\w+[\s|\S]*\}/.test(arg))
+                    // if (/[\w\.]+\s*\{\s*[\w-]+\s*:\s*\w+[\s|\S]*\}/.test(arg))
+                    if (/[\w\.]+\s*\{\s*[\w-]+\s*:[\s|\S]*\}/.test(arg))
                         settings.css = arg;
-                    else
+                    else if (arg)
                         settings.title = arg;
                     break;
             }
@@ -144,8 +179,18 @@ function GM_configInit(config, args) {
     // Set the custom css
     if (settings.css) config.css.stylish = settings.css;
 
+    if (settings.skin) {
+        var skin = config.css['skin_' + settings.skin];
+        if (skin) {
+            config.css.basic += skin;
+        }
+    }
+
     // Set the frame
     if (settings.frame) config.frame = settings.frame;
+    if (settings.frameStyle) config.frameStyle = settings.frameStyle;
+
+    config.isTabs = settings.isTabs;
 
     // Set the event callbacks
     if (settings.events) {
@@ -219,6 +264,7 @@ GM_configStruct.prototype = {
             // Append elements
             var section = bodyWrapper,
                     secNum = 0; // Section count
+            var lastParentNode = null;
 
             // loop through fields
             for (var id in fields) {
@@ -248,8 +294,19 @@ GM_configStruct.prototype = {
                     ++secNum;
                 }
 
+                if (settings.line == 'start' && lastParentNode) {  // 切换到下一行
+                    lastParentNode = null;
+                }
+
                 // Create field elements and append to current section
-                section.appendChild((field.wrapper = field.toNode(configId)));
+                (lastParentNode || section).appendChild((field.wrapper = field.toNode(configId, lastParentNode)));
+
+                if (settings.line == 'start') {
+                    lastParentNode = field.wrapper;
+                    lastParentNode.classList.add('inline')
+                } else if (settings.line == 'end') {
+                    lastParentNode = null;
+                }
             }
 
             // Add save and close buttons
@@ -303,6 +360,10 @@ GM_configStruct.prototype = {
                                         config.frame.contentWindow || window,
                                         config.frame);
 
+            if (config.isTabs) {
+                config.toTabs();
+            }
+
             // Close frame on window close
             window.addEventListener('beforeunload', function () {
                     config.close();
@@ -330,6 +391,12 @@ GM_configStruct.prototype = {
                 id: this.id,
                 style: defaultStyle
             })));
+
+            if (this.frameStyle) {
+                Object.keys(this.frameStyle).forEach(function(key) {
+                    config.frame.style[key] = config.frameStyle[key];
+                })
+            }
 
             // In WebKit src can't be set until it is added to the page
             this.frame.src = 'about:blank';
@@ -441,7 +508,7 @@ GM_configStruct.prototype = {
                     else if (",style,accesskey,id,name,src,href,which,for".indexOf("," +
                                      b.toLowerCase()) != -1)
                         A.setAttribute(b, B[b]);
-                    else
+                    else if (typeof B[b] != 'undefined')
                         A[b] = B[b];
                 }
                 if (typeof arguments[2] == "string")
@@ -467,6 +534,57 @@ GM_configStruct.prototype = {
 
     remove: function (el) {
         if (el && el.parentNode) el.parentNode.removeChild(el);
+    },
+
+    toTabs: function() {  // 转为 tab 的形式
+        var body = this.frame.tagName == 'IFRAME' ? this.frame.contentWindow.document : this.frame,
+            configId = this.id;
+        var $ = function(id) {
+            return body.getElementById(configId + '_' + id);
+        };
+
+        var headers = body.querySelectorAll('.section_header');
+        if (!headers.length) return;
+
+        var anch = this.create('div', {
+            // id: configId + '_tab_holder',
+            className: 'nav-tabs',
+        });
+
+        for (var i = 0, header; i < headers.length; i++) {
+            header = headers[i];
+            if (i == 0) {
+                header.classList.add('active');
+            }
+            anch.appendChild(header);
+        }
+
+        anch.addEventListener('click', this.toggleTab.bind(this), false);
+
+        $('section_0').parentNode.insertBefore(anch, $('section_0'));
+
+        var curTab = localStorage.getItem('picviewerCE.config.curTab') || 0;
+        this.toggleTab(parseInt(curTab, 10));
+    },
+    toggleTab: function(e) {
+        var body = this.frame.tagName == 'IFRAME' ? this.frame.contentWindow.document : this.frame,
+            configId = this.id;
+
+        var curTab = typeof e == 'number' ? e : /\_(\d+)/.exec(e.target.id)[1];
+
+        [].forEach.call(body.querySelectorAll('.section_header'), function(header, i) {
+            if (i == curTab) {
+                header.classList.add('active');
+            } else {
+                header.classList.remove('active');
+            }
+        });
+
+        [].forEach.call(body.querySelectorAll('.section_header_holder'), function(holder, i) {
+            holder.style.display = (i == curTab) ? 'block' : 'none';
+        });
+
+        localStorage.setItem('picviewerCE.config.curTab', curTab)
     }
 };
 
@@ -517,7 +635,7 @@ GM_configStruct.prototype = {
 function GM_configDefaultValue(type, options) {
     var value;
 
-    if (type.indexOf('unsigned ') == 0)
+    if (type && type.indexOf('unsigned ') == 0)
         type = type.substring(9);
 
     switch (type) {
@@ -548,6 +666,7 @@ function GM_configField(settings, stored, id, customType) {
 
     // Buttons are static and don't have a stored value
     if (settings.type == "button") this.save = false;
+    if (settings.type == "span") this.save = false;
 
     // if a default value wasn't passed through init() then
     //   if the type is custom use its default value
@@ -573,7 +692,7 @@ function GM_configField(settings, stored, id, customType) {
 GM_configField.prototype = {
     create: GM_configStruct.prototype.create,
 
-    toNode: function(configId) {
+    toNode: function(configId, lastParentNode) {
         var field = this.settings,
                 value = this.value,
                 options = field.options,
@@ -583,7 +702,10 @@ GM_configField.prototype = {
                 create = this.create;
 
         function addLabel(pos, labelEl, parentNode, beforeEl) {
-            if (!beforeEl) beforeEl = parentNode.firstChild;
+            if (!beforeEl) {
+                beforeEl = lastParentNode ? parentNode.lastChild : parentNode.firstChild;  // oneLine 的修正
+            }
+
             switch (pos) {
                 case 'right': case 'below':
                     if (pos == 'below')
@@ -597,10 +719,11 @@ GM_configField.prototype = {
             }
         }
 
-        var retNode = create('div', { className: 'config_var',
+        var retNode = create(lastParentNode ? 'span' : 'div', { className: 'config_var',
                     id: configId + '_' + id + '_var',
-                    title: field.title || '' }),
-                firstProp;
+                    title: field.title }),
+            firstProp;
+        if (lastParentNode && field.className) retNode.classList.add(field.className);
 
         // Retrieve the first prop
         for (var i in field) { firstProp = i; break; }
@@ -613,18 +736,31 @@ GM_configField.prototype = {
             }, field.label) : null;
 
         switch (type) {
+            case 'span':
+                label = null;
+
+                this.node = create('span', {
+                    innerHTML: field.label,
+                    className: 'field_label',
+                    title: field.title,
+                    style: field.style
+                });
+                retNode = this.node;
+                break;
             case 'textarea':
                 retNode.appendChild((this.node = create('textarea', {
                     innerHTML: value,
                     id: configId + '_field_' + id,
-                    className: 'block',
+                    className: 'block' + (field.className ? (" " + field.className) : ''),
                     cols: (field.cols ? field.cols : 20),
-                    rows: (field.rows ? field.rows : 2)
+                    rows: (field.rows ? field.rows : 2),
+                    placeholder: field.placeholder
                 })));
                 break;
             case 'radio':
                 var wrap = create('div', {
-                    id: configId + '_field_' + id
+                    id: configId + '_field_' + id,
+                    className: field.className
                 });
                 this.node = wrap;
 
@@ -651,25 +787,33 @@ GM_configField.prototype = {
                 break;
             case 'select':
                 var wrap = create('select', {
-                    id: configId + '_field_' + id
+                    id: configId + '_field_' + id,
+                    className: field.className
                 });
                 this.node = wrap;
 
-            for (var i = 0, len = options.length; i < len; ++i) {
-                var option = options[i];
-                wrap.appendChild(create('option', {
-                    value: option,
-                    selected: option == value,
-                }, field.textContents ? field.textContents[i] : option));
-            }
+                if (Array.isArray(options)) {  // 转为 object 的格式
+                    var newOptions = {};
+                    options.forEach(function(option) {
+                        newOptions[option] = option;
+                    });
+                    options = newOptions;
+                }
 
+                Object.keys(options).forEach(function(option) {
+                    wrap.appendChild(create('option', {
+                        value: option,
+                        selected: option == value,
+                    }, options[option]));
+                });
                 retNode.appendChild(wrap);
                 break;
             default: // fields using input elements
                 var props = {
                     id: configId + '_field_' + id,
                     type: type,
-                    value: type == 'button' ? field.label : value
+                    value: type == 'button' ? field.label : value,
+                    className: field.className
                 };
 
                 switch (type) {
@@ -683,10 +827,13 @@ GM_configField.prototype = {
                         break;
                     case 'hidden':
                         break;
+                    case 'number':
+                        break;
                     default:
                         // type = text, int, or float
                         props.type = 'text';
                         props.size = field.size ? field.size : 25;
+                        props.placeholder = field.placeholder;
                 }
 
                 retNode.appendChild((this.node = create('input', props)));
@@ -699,7 +846,19 @@ GM_configField.prototype = {
                 labelPos = firstProp == "label" || type == "radio" ?
                     "left" : "right";
 
+            if ('className' in field) {
+                label.className += ' ' + field.className;
+            }
+
+            if (field.style && field.style.label) {
+                label.style.cssText = field.style.label;
+            }
+
             addLabel(labelPos, label, retNode);
+        }
+
+        if (field.after) {
+            retNode.appendChild(document.createTextNode(field.after));
         }
 
         return retNode;
@@ -714,7 +873,7 @@ GM_configField.prototype = {
 
         if (!node) return rval;
 
-        if (type.indexOf('unsigned ') == 0) {
+        if (type && type.indexOf('unsigned ') == 0) {
             type = type.substring(9);
             unsigned = true;
         }

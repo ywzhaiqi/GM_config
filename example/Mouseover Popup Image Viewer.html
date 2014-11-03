@@ -1,0 +1,126 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GM_config 模仿 Mouseover Popup Image Viewer 设置界面</title>
+</head>
+<body>
+    <script src="../gm_config.user.js"></script>
+    <script>
+        GM_config.init({
+            id: 'MPIV',
+            title: 'Mouseover Popup Image Viewer',
+            frameStyle: {
+                width: '652px',
+            },
+            skin: 1,
+            css: [
+                '#GM_config_scales_var { margin-left: 10px; }',
+                ].join('\n'),
+            fields: {
+            'popup': {
+                    label: 'Popup:',
+                    type: 'select',
+                    options: {
+                        'auto': 'automatically',
+                        'context': 'right click or ctrl',
+                        'ctrl': 'ctrl'
+                    },
+                    line: 'start',
+                },
+                'delay': {
+                    label: ' after',
+                    type: 'text',
+                    default: 500,
+                    size: 2,
+                    after: ' ms',
+                },
+                'thumbnails': {
+                    label: ' over ',
+                    type: 'select',
+                    options: ['thumbnails and text links', 'thumbnails only'],
+                },
+                'preload': {
+                    label: ' Preloading',
+                    type: 'checkbox',
+                    labelPos: 'right',
+                    line: 'end'
+                },
+
+                // line two
+                'zoom': {
+                    label: 'Zoom: ',
+                    type: 'select',
+                    options: {
+                        'context': 'right click or shift',
+                        'wheel': 'wheel up or shift',
+                        'shift': 'shift',
+                        'auto': 'automatically'
+                    },
+                    line: 'start'
+                },
+                'scales': {
+                    label: ' Custom scale factors: ',
+                    type: 'text',
+                    size: 15,
+                    placeholder: 'e.g. 0 0.5 1 2',
+                },
+                'line_scales': {
+                    label: '(?)',
+                    type: 'span',
+                    title: "values smaller than popup's non-zoomed size are skipped, 0 = fit to window, 0! = same as 0 but replaces factors smaller than calculated value so zoom jumps directly to calculated value, asterisk after value marks default zoom factor (e.g. 1*)",
+                    style: 'cursor:help'
+                },
+
+                'scale': {
+                    label: 'Only show popup over scaled-down images when natural size is ',
+                    type: 'text',
+                    size: 2,
+                    'default': 1.5,
+                    after: ' times larger',
+                    line: 'start',
+                },
+                'center': {
+                    label: ' Always centered ',
+                    type: 'checkbox',
+                    labelPos: 'right',
+                    line: 'start',
+                },
+                'cursor': {
+                    label: ' Autohide cursor ',
+                    type: 'checkbox',
+                    labelPos: 'right',
+                },
+                'imagetab': {
+                    label: ' Run in image tabs',
+                    type: 'checkbox',
+                    labelPos: 'right',
+                    line: 'end',
+                },
+
+                'close': {
+                    label: 'If zooming out further is not possible, ',
+                    type: 'select',
+                    options: {
+                        '': 'stay in zoom mode',
+                        'close': 'close popup'
+                    },
+                },
+
+                'css': {
+                    label: 'Custom CSS:',
+                    type: 'textarea',
+                    labelPos: 'top',
+                    placeholder: 'Custom CSS'
+                },
+                'hosts': {
+                    label: 'Custom host rules:',
+                    type: 'textarea',
+                    labelPos: 'top'
+                }
+            }
+        });
+
+        GM_config.open();
+    </script>
+</body>
+</html>

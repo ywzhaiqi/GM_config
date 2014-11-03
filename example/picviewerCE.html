@@ -1,0 +1,387 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GM_config 构建 picviewerCE 设置窗口</title>
+</head>
+<body>
+    <script src="../gm_config.user.js"></script>
+    <script>
+        var prefs={
+            floatBar:{//浮动工具栏相关设置.
+                butonOrder:['actual','current','magnifier','gallery'],//按钮排列顺序'actual'(实际的图片),'current'(当前显示的图片),'magnifier'(放大镜观察),'gallery'(图集)
+                showDelay:366,//浮动工具栏显示延时.单位(毫秒)
+                hideDelay:566,//浮动工具栏隐藏延时.单位(毫秒)
+                position:'top left',// 取值为: 'top left'(图片左上角) 或者 'top right'(图片右上角) 'bottom right'(图片右下角) 'bottom left'(图片左下角);
+                offset:{//浮动工具栏偏移.单位(像素)
+                    x:-15,//x轴偏移(正值,向右偏移,负值向左)
+                    y:-15,//y轴偏移(正值,向下,负值向上)
+                },
+                forceShow:{//在没有被缩放的图片上,但是大小超过下面设定的尺寸时,强制显示浮动框.(以便进行旋转,放大,翻转等等操作)..
+                    enabled:true,//启用强制显示.
+                    size:{//图片尺寸.单位(像素);
+                        w:166,
+                        h:166,
+                    },
+                },
+                minSizeLimit:{//就算是图片被缩放了(看到的图片被设定了width或者height限定了大小,这种情况下),如果没有被缩放的原图片小于设定值,那么也不显示浮动工具栏.
+                    w:100,
+                    h:100,
+                },
+
+                // 按键，感觉用不太到，默认禁用
+                keys: {
+                    enable: false,
+                    actual: 'a',  //  当出现悬浮条时按下 `a` 打开原图
+                    current: 'c',
+                    magnifier: 'm',
+                    gallery: 'g',
+                },
+            },
+
+            magnifier:{//放大镜的设置.
+                radius: 77,//默认半径.单位(像素).
+                wheelZoom:{//滚轮缩放.
+                    enabled:true,
+                    pauseFirst:true,//需要暂停(单击暂停)后,才能缩放.(推荐,否则因为放大镜会跟着鼠标,如果放大镜过大,那么会影响滚动.)..
+                    range:[0.4,0.5,0.6,0.7,0.8,0.9,1,1.1,1.2,1.3,1.4,1.5,1.7,1.9,2,2.5,3.0,4.0],//缩放的范围
+                },
+            },
+
+            gallery:{//图库相关设定
+                fitToScreen:true,//图片适应屏幕(适应方式为contain，非cover).
+                sidebarPosition: 'bottom',//'top' 'right' 'bottom' 'left'  四个可能值
+                    sidebarSize: 120,//侧栏的高（如果是水平放置）或者宽（如果是垂直放置）
+                    sidebarToggle: true,  // 是否显示隐藏按钮
+                transition:true,//大图片区的动画。
+                preload:true,//对附近的图片进行预读。
+                max:5,//最多预读多少张（前后各多少张）
+
+                autoScrollAndReload: false, // 最后一张图片时，滚动主窗口到最底部，然后自动重载库的图片。还有bug，有待进一步测试
+                autoZoom: true,  // 如果有放大，则把图片及 sidebar 部分的缩放改回 100%，增大可视面积（仅在 chrome 下有效）
+                descriptionLength: 32,  // 注释的最大宽度
+            },
+
+            imgWindow:{// 图片窗相关设置
+                fitToScreen: false,//适应屏幕,并且水平垂直居中(适应方式为contain，非cover).
+                syncSelectedTool:true,//同步当前选择的工具，如果开了多个图片窗口，其中修改一个会反映到其他的上面。
+                defaultTool:'hand',//"hand","rotate","zoom";打开窗口的时候默认选择的工具
+                close:{//关闭的方式
+                    escKey:true,//按esc键
+                    dblClickImgWindow: true,//双击图片窗口
+                    clickOutside:'', // 点击图片外部关闭。值为''|'click'|'dblclick'；无或点击或双击
+                },
+                overlayer:{// 覆盖层.
+                    shown:false,//显示
+                    color:'rgba(0,0,0,0.8)',//颜色和不透明度设置.
+                },
+                shiftRotateStep:15,// 旋转的时候，按住shift键时,旋转的步进.单位:度.
+                zoom:{//滚轮缩放
+                    range:[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.1,1.2,1.3,1.4,1.5,1.7,1.9,2,2.5,3.0,4.0],//缩放比例.(不要出现负数,谢谢-_-!~)
+                    mouseWheelZoom:true,//是否允许使用滚轮缩放。
+                },
+            },
+
+            //等图片完全载入后,才开始执行弹出,放大等等操作,
+            //按住ctrl键的时候,可以临时执行和这个设定相反的设定.
+            waitImgLoad: false,
+
+            //框架里面的图片在顶层窗口展示出来，但是当frame与顶层窗口domain不一样的时候，可能导致图片被反盗链拦截，
+            //按住shift键，可以临时执行和这个设定相反的设定
+            framesPicOpenInTopWindow:true,
+
+            debug: false,
+        };
+
+        GM_config.init({
+            id: 'pv-prefs',
+            title: GM_config.create('a', {
+               href: 'https://greasyfork.org/zh-CN/scripts/5199-picviewer-ce',
+               target: '_blank',
+               textContent: 'picviewerCE 设置',
+               title: '点击此处打开主页'
+            }),
+            isTabs: true,
+            skin: 'tab',
+            frameStyle: {
+                width: '480px',
+                height: '65%',
+            },
+            css: [
+                "#pv-prefs input[type='text'] { width: 50px; } ",
+                // 特殊的
+                "#pv-prefs label.size { width: 205px; }",
+                "#pv-prefs span.sep-x { margin-left: 0px !important; }",
+                "#pv-prefs label.sep-x { margin-right: 4px; }",
+                "#pv-prefs label.floatBar-key { margin-left: 20px; width: 100px; }",
+                "#pv-prefs input.color { width: 120px; }",
+            ].join('\n'),
+            fields: {
+                // 浮动工具栏
+                'floatBar.position': {
+                    label: '位置：',
+                    type: 'select',
+                    options: {
+                        'top left': '图片左上角',
+                        'top right': '图片右上角',
+                        'bottom right': '图片右下角',
+                        'bottom left': '图片左下角'
+                    },
+                    default: prefs.floatBar.position,
+                    section: ['浮动工具栏'],
+                },
+                'floatBar.showDelay': {
+                    label: '显示延时',
+                    type: 'int',
+                    default: prefs.floatBar.showDelay,
+                    after: ' 毫秒',
+                },
+                'floatBar.hideDelay': {
+                    label: '隐藏延时',
+                    type: 'int',
+                    className: 'hideDelay',
+                    default: prefs.floatBar.hideDelay,
+                    after: ' 毫秒'
+                },
+                'floatBar.forceShow.size.w': {
+                    label: '非缩放图片，超过该尺寸，强制显示',
+                    type: 'int',
+                    className: 'size',
+                    default: prefs.floatBar.forceShow.size.w,
+                    title: '在没有被缩放的图片上,但是大小超过下面设定的尺寸时,强制显示浮动框.(以便进行旋转,放大,翻转等等操作)..',
+                    line: 'start',
+                },
+                'floatBar.forceShow.size.h': {
+                    label: ' x ',
+                    type: 'int',
+                    className: 'sep-x',
+                    after: ' 像素',
+                    default: prefs.floatBar.forceShow.size.h,
+                    line: 'end',
+                },
+                'floatBar.minSizeLimit.w': {
+                    label: '缩放图片，小于该尺寸，不显示',
+                    type: 'int',
+                    className: 'size',
+                    default: prefs.floatBar.minSizeLimit.w,
+                    title: '就算是图片被缩放了(看到的图片被设定了width或者height限定了大小,这种情4况下),如果没有被缩放的原图片小于设定值,那么也不显示浮动工具栏',
+                    line: 'start',
+                },
+                'floatBar.minSizeLimit.h': {
+                    label: ' x ',
+                    type: 'int',
+                    className: 'sep-x',
+                    after: ' 像素',
+                    default: prefs.floatBar.minSizeLimit.h,
+                    line: 'end',
+                },
+                // 按键
+                'floatBar.keys.enable': {
+                    label: '启用以下4个快捷键',
+                    type: 'checkbox',
+                    default: prefs.floatBar.keys.enable
+                },
+                'floatBar.keys.actual': {
+                    label: '打开大图',
+                    type: 'text',
+                    className: 'floatBar-key',
+                    default: prefs.floatBar.keys.actual,
+                    title: '当出现悬浮条时按下此按键打开大图'
+                },
+                'floatBar.keys.current': {
+                    label: '打开当前图片',
+                    type: 'text',
+                    className: 'floatBar-key',
+                    default: prefs.floatBar.keys.current,
+                    title: '当出现悬浮条时按下此按键打开当前显示的图片'
+                },
+                'floatBar.keys.magnifier': {
+                    label: '打开放大镜观察',
+                    type: 'text',
+                    className: 'floatBar-key',
+                    default: prefs.floatBar.keys.magnifier,
+                    title: '当出现悬浮条时按下此按键打开放大镜观察'
+                },
+                'floatBar.keys.gallery': {
+                    label: '打开图库',
+                    type: 'text',
+                    className: 'floatBar-key',
+                    default: prefs.floatBar.keys.gallery,
+                    title: '当出现悬浮条时按下此按键打开图库'
+                },
+
+                // 放大镜
+                'magnifier.radius': {
+                    label: '默认半径',
+                    type: 'int',
+                    default: prefs.magnifier.radius,
+                    section: ['放大镜'],
+                    after: ' 像素'
+                },
+                'magnifier.wheelZoom.enabled': {
+                    label: '启用滚轮缩放',
+                    type: 'checkbox',
+                    default: prefs.magnifier.wheelZoom.enabled,
+                },
+                'magnifier.wheelZoom.range': {
+                    label: '滚轮缩放的范围',
+                    type: 'textarea',
+                    default: prefs.magnifier.wheelZoom.range.join(', '),
+                },
+
+                // 图库
+                'gallery.fitToScreen': {
+                    label: '图片适应屏幕',
+                    type: 'checkbox',
+                    default: prefs.gallery.fitToScreen,
+                    section: ['图库'],
+                    title: '适应方式为contain，非cover'
+                },
+                'gallery.sidebarPosition': {
+                    label: '缩略图栏位置',
+                    type: 'select',
+                    options: {
+                        'bottom': '底部',
+                        'right': '右侧',
+                        'left': '左侧',
+                        'top': '顶部'
+                    },
+                    default: prefs.gallery.sidebarPosition,
+                },
+                'gallery.sidebarSize': {
+                    label: '缩略图栏高',
+                    type: 'int',
+                    default: prefs.gallery.sidebarSize,
+                    title: '缩略图栏的高（如果是水平放置）或者宽（如果是垂直放置）',
+                    after: ' 像素'
+                },
+                'gallery.max': {
+                    label: '最多预读  ',
+                    title: '前后各多少张',
+                    type: 'number',
+                    default: prefs.gallery.max,
+                    after: ' 张图片'
+                },
+                'gallery.autoZoom': {
+                    label: '缩放改回 100%（chrome）',
+                    type: 'checkbox',
+                    default: prefs.gallery.autoZoom,
+                    title: '如果有放大，则把图片及 sidebar 部分的缩放改回 100%，增大可视面积（仅在 chrome 下有效）'
+                },
+
+                // 图片窗口
+                'imgWindow.fitToScreen': {
+                    label: '适应屏幕，并且水平垂直居中',
+                    type: 'checkbox',
+                    default: prefs.imgWindow.fitToScreen,
+                    section: ['图片窗口'],
+                    title: '适应方式为contain，非cover',
+                },
+                'imgWindow.close.defaultTool': {
+                    label: '打开窗口的时候默认选择的工具',
+                    type: 'select',
+                    options: {
+                        'hand': '抓手',
+                        'rotate': '旋转',
+                        'zoom': '放大镜',
+                    },
+                    default: prefs.imgWindow.close.defaultTool,
+                },
+                'imgWindow.close.escKey': {
+                    label: 'Esc键关闭',
+                    type: 'checkbox',
+                    default: prefs.imgWindow.close.escKey,
+                    line: 'start',
+                },
+                'imgWindow.close.dblClickImgWindow': {
+                    label: '双击图片窗口关闭',
+                    type: 'checkbox',
+                    default: prefs.imgWindow.close.dblClickImgWindow,
+                },
+                'imgWindow.close.clickOutside': {
+                    label: '点击图片外部关闭',
+                    type: 'select',
+                    options: {
+                        '': '无',
+                        'click': '单击',
+                        'dblclick': '双击',
+                    },
+                    default: prefs.imgWindow.close.clickOutside,
+                    line: 'end',
+                },
+                'imgWindow.overlayer.shown': {
+                    label: '覆盖层是否显示',
+                    type: 'checkbox',
+                    default: prefs.imgWindow.overlayer.shown,
+                },
+                'imgWindow.overlayer.color': {
+                    label: '覆盖层的颜色和不透明度',
+                    type: 'text',
+                    className: 'color',
+                    default: prefs.imgWindow.overlayer.color,
+                },
+                'imgWindow.shiftRotateStep': {
+                    label: '旋转的时候，按住shift键，旋转的步进',
+                    type: 'int',
+                    default: prefs.imgWindow.shiftRotateStep,
+                    after: ' 度'
+                },
+                'imgWindow.zoom.range': {
+                    label: '滚轮缩放比例',
+                    type: 'textarea',
+                    default: prefs.imgWindow.zoom.range.join(', '),
+                    title: '缩放比例.(不要出现负数,谢谢-_-!~)'
+                },
+
+                // 其它
+                'waitImgLoad': {
+                    label: '等图片完全载入后，才开始执行弹出放大等操作',
+                    type: 'checkbox',
+                    default: prefs.waitImgLoad,
+                    section: ['其它'],
+                    title: '按住ctrl键的时候,可以临时执行和这个设定相反的设定'
+                },
+                'debug': {
+                    label: '调试模式',
+                    type: 'checkbox',
+                    default: prefs.debug
+                },
+            },
+            events: {
+                open: function(doc, win, frame) {
+                    // this.toTabs();
+                    
+                },
+                save: function() {
+
+                }
+            }
+        });
+
+        GM_config.open();
+
+        loadPrefs()
+
+        function loadPrefs() {
+            // 根据 GM_config 的设置载入设置到 prefs
+            Object.keys(GM_config.fields).forEach(function(keyStr) {
+                var keys = keyStr.split('.');
+                var lastKey = keys.pop();
+
+                var lastPref = keys.reduce(function(previousValue, curKey) {
+                    return previousValue[curKey];
+                }, prefs) || prefs;
+                
+                var value = GM_config.get(keyStr);
+                if (value) {
+                    // 特殊的修正
+                    if (keyStr == 'magnifier.wheelZoom.range' || keyStr == 'imgWindow.zoom.range') {
+                        lastPref[lastKey] = value.split(/[,，]\s*/).map(function(s) { return parseFloat(s)});
+                    } else {
+                        lastPref[lastKey] = value;
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
