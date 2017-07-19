@@ -15,3 +15,10 @@ greasyfork 的地址：[https://greasyfork.org/zh-CN/scripts/6158-gm-config-cn](
 
 1. [picviewerCE 设置窗口（tab 格式）](https://github.com/ywzhaiqi/GM_config/blob/master/example/picviewerCE.html)
 2. [Mouseover Popup Image Viewer 设置窗口](https://github.com/ywzhaiqi/GM_config/blob/master/example/Mouseover Popup Image Viewer.html)
+
+## 原版说明
+
+See what GM_config can do with:
+
+* a server side live example please visit the [demo page](https://sizzlemctwizzle.github.io/GM_config/).
+* a client side live example please visit the [GM_config Unit Test](https://openuserjs.org/scripts/sizzle/The_GM_config_Unit_Test), install the user script, and refresh that same page. Check out the [Userscript Beginners HOWTO](https://openuserjs.org/about/Userscript-Beginners-HOWTO) if you are new to user scripts.
