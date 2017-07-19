@@ -87,7 +87,7 @@ function GM_configInit(config, args) {
                 "#GM_config .section_desc { background: #EFEFEF; border: 1px solid #CCC; color: #575757;" +
                   " font-size: 9pt; margin: 0 0 6px; }",
                 // newer
-                "#GM_config input[type='number'] { width: 60px; }",
+                "#GM_config input[type='number'] { width: 50px; }",
                 "#GM_config .nav-tabs { margin: 10 0}",
                 "#GM_config .nav-tabs > div { display: inline; padding: 3px 10px; }",
                 "#pv-prefs .section_header_holder { padding-left: 10px; }",
@@ -859,6 +859,13 @@ GM_configField.prototype = {
 
         if (field.after) {
             retNode.appendChild(document.createTextNode(field.after));
+        }
+
+        if (field.attr) {
+            var self = this;
+            Object.keys(field.attr).forEach(function(key) {
+                self.node.setAttribute(key, field.attr[key]);
+            });
         }
 
         return retNode;
