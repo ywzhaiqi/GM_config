@@ -563,7 +563,7 @@ GM_configStruct.prototype = {
 
         $('section_0').parentNode.insertBefore(anch, $('section_0'));
 
-        var curTab = localStorage.getItem('picviewerCE.config.curTab') || 0;
+        var curTab = localStorage.getItem(configId + '.config.curTab') || 0;
         this.toggleTab(parseInt(curTab, 10));
     },
     toggleTab: function(e) {
@@ -584,7 +584,7 @@ GM_configStruct.prototype = {
             holder.style.display = (i == curTab) ? 'block' : 'none';
         });
 
-        localStorage.setItem('picviewerCE.config.curTab', curTab)
+        localStorage.setItem(configId + '.config.curTab', curTab)
     }
 };
 

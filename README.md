@@ -17,7 +17,7 @@ Greasemonkey 脚本设置界面快速搭建辅助库。[sizzlemctwizzle/GM_confi
 
 1. 改成中文 "确定"、"取消" 按钮。
 2. select 新增了 textContents 数组。
-4. 新增了很多特性，详见示例
+3. 新增了很多特性，详见示例
 
 ## 类似
 
