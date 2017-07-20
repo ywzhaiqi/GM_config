@@ -37,8 +37,8 @@ See what GM_config can do with:
 
 
 [example_picviewerCE.html]: http://rawgit.com/ywzhaiqi/GM_config/master/example/picviewerCE.html
-[example_picviewerCE.jpg]: http://rawgit.com/ywzhaiqi/GM_config/master/docs/example_picviewerCE.jpg
+[example_picviewerCE.jpg]: https://github.com/ywzhaiqi/GM_config/raw/master/docs/example_picviewerCE.jpg
 [raw_picviewerCE.html]: https://github.com/ywzhaiqi/GM_config/blob/master/example/picviewerCE.html
 [example_MPIV.html]: http://rawgit.com/ywzhaiqi/GM_config/master/example/Mouseover_Popup_Image_Viewer.html
-[example_MPIV.jpg]: http://rawgit.com/ywzhaiqi/GM_config/master/docs/example_Mouseover_Popup_Image_Viewer.jpg
+[example_MPIV.jpg]: https://github.com/ywzhaiqi/GM_config/raw/master/docs/example_Mouseover_Popup_Image_Viewer.jpg
 [raw_MPIV.html]: https://github.com/ywzhaiqi/GM_config/blob/master/example/Mouseover_Popup_Image_Viewer.html
